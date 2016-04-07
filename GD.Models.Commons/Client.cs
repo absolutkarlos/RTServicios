@@ -43,7 +43,7 @@ namespace GD.Models.Commons
 		public string SiteNumber { get; set; }
 
 		[JsonProperty(@"clientnumber")]
-		public int ClientNumber { get; set; }
+		public int? ClientNumber { get; set; }
 
 		[JsonProperty(@"status")]
 		public Status Status { get; set; }

@@ -22,7 +22,7 @@ namespace GD.Models.Commons
 		public Position Position { get; set; }
 
 		[JsonProperty(@"idcontactrelated")]
-		public int IdContactRelated { get; set; }
+		public int? IdContactRelated { get; set; }
 
 		[JsonProperty(@"country")]
 		public Country Country { get; set; }
