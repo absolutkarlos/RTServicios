@@ -22,10 +22,14 @@ namespace GD.Core.Business
 		private IEntityChannelRepository EntityChannelRepository { get; }
 		private IRepository<EntityChannelType> EntityChannelTypeRepository { get; }
 		private IRepository<ServiceType> ServiceTypeRepository { get; }
+		private IRepository<AccessType> AccessTypeRepository { get; }
+		private IRepository<Material> MaterialRepository { get; }
+		private IRepository<UnitMeasure> UnitMeasureRepository { get; }
 
 		public OrderBl(IOrderRepository repository, ISiteAccessTypeRepository siteAccessTypeRepository, ISiteSheduleRepository siteSheduleRepository, IOrderMaterialRepository orderMaterialRepository,
 						IOrderShotRepository orderShotRepository, IOrderFlowRepository orderFlowRepository, ISiteServiceTypeRepository siteServiceTypeRepository, IEntityContactRepository entityContactRepository,
-						IEntityChannelRepository entityChannelRepository, IRepository<EntityChannelType> entityChannelTypeRepository, IRepository<ServiceType> serviceTypeRepository)
+						IEntityChannelRepository entityChannelRepository, IRepository<EntityChannelType> entityChannelTypeRepository, IRepository<ServiceType> serviceTypeRepository, IRepository<AccessType> accessTypeRepository,
+						IRepository<Material> materialRepository, IRepository<UnitMeasure> unitMeasureRepository)
 		{
 			Repository = repository;
 			SiteAccessTypeRepository = siteAccessTypeRepository;
@@ -38,6 +42,9 @@ namespace GD.Core.Business
 			EntityChannelRepository = entityChannelRepository;
 			EntityChannelTypeRepository = entityChannelTypeRepository;
 			ServiceTypeRepository = serviceTypeRepository;
+			AccessTypeRepository = accessTypeRepository;
+			MaterialRepository = materialRepository;
+			UnitMeasureRepository = unitMeasureRepository;
 		}
 
 		public long InsertValue(Order model)
@@ -82,9 +89,9 @@ namespace GD.Core.Business
 			Repository.Update(model);
 		}
 
-		public void UpdateStatus(Order model)
+		public long UpdateStatus(Order model)
 		{
-			OrderFlowRepository.Insert(new OrderFlow
+			return OrderFlowRepository.Insert(new OrderFlow
 			{
 				Order = new Order
 				{
@@ -156,8 +163,8 @@ namespace GD.Core.Business
 						order.Site.Client.ListEntityContact = new List<EntityContact>(listcontacts);
 					}
 
-					var listSiteServiceType = SiteServiceTypeRepository.GetBySite(order.Site.Id).ToList();
 
+					var listSiteServiceType = SiteServiceTypeRepository.GetBySite(order.Site.Id).ToList();
 
 					foreach (var serviceType in listSiteServiceType)
 					{
@@ -168,17 +175,36 @@ namespace GD.Core.Business
 
 					order.Site.ListServiceType = new List<ServiceType>(listSiteServiceType);
 
+
+
+					var listSiteAccessType = SiteAccessTypeRepository.GetBySite(order.Site.Id).ToList();
+
+					foreach (var siteAccessType in listSiteAccessType)
+					{
+						siteAccessType.AccessType = AccessTypeRepository.GetById(siteAccessType.IdAccessType);
+					}
+
+					order.Site.ListSiteAccessType = new List<SiteAccessType>(listSiteAccessType);
+
+
+
+					var listOrderMaterials = OrderMaterialRepository.GetByOrder(order.Id).ToList();
+
+					foreach (var orderMaterial in listOrderMaterials)
+					{
+						orderMaterial.Material = MaterialRepository.GetById(orderMaterial.IdMaterial);
+						orderMaterial.Material.UnitMeasure = UnitMeasureRepository.GetById(orderMaterial.Material.IdUnitMeasure);
+					}
+
+					order.ListMaterials = new List<OrderMaterial>(listOrderMaterials);
+
+
+
 					var listOrderFlow = OrderFlowRepository.GetByOrder(order.Id).ToList();
 					order.ListOrderFlow = new List<OrderFlow>(listOrderFlow);
 
 					var listSiteSchedule = SiteSheduleRepository.GetBySite(order.Site.Id).ToList();
 					order.Site.ListSiteSchedule = new List<SiteSchedule>(listSiteSchedule);
-
-					var listAccessType = SiteAccessTypeRepository.GetBySite(order.Site.Id).ToList();
-					order.Site.ListSiteAccessType = new List<SiteAccessType>(listAccessType);
-
-					var listMaterials = OrderMaterialRepository.GetByOrder(order.Id).ToList();
-					order.ListMaterials = new List<OrderMaterial>(listMaterials);
 
 					var listOrderShots = OrderShotRepository.GetByOrder(order.Id).ToList();
 					order.ListOrderShot = new List<OrderShot>(listOrderShots);

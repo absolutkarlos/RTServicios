@@ -7,11 +7,12 @@ using GD.RtSurvey.Api.Controllers.Base;
 namespace GD.RtSurvey.Api.Controllers
 {
 	[Authorize]
+	[RoutePrefix(@"api/orderflow")]
 	public class OrderFlowController : BaseController
 	{
-		private readonly IBusinessLayer<OrderFlow> _orderFlowBl;
+		private readonly IOrderFlowBl _orderFlowBl;
 
-		public OrderFlowController(IBusinessLayer<OrderFlow> orderFlowBl)
+		public OrderFlowController(IOrderFlowBl orderFlowBl)
 		{
 			_orderFlowBl = orderFlowBl;
 		}
@@ -38,6 +39,14 @@ namespace GD.RtSurvey.Api.Controllers
 		public void Put([FromBody]OrderFlow orderFlow)
 		{
 			_orderFlowBl.UpdateValue(orderFlow);
+		}
+
+		// PUT api/OrderFlow/UpdateStatus
+		[HttpPut]
+		[Route(@"UpdateStatus/")]
+		public void UpdateStatus([FromBody]OrderFlow orderFlow)
+		{
+			_orderFlowBl.UpdateStatus(orderFlow);
 		}
 
 		// DELETE api/OrderFlow/5

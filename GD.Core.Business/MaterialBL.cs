@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GD.Core.Business.Interfaces;
 using GD.Data.Access.Interfaces;
 using GD.Models.Commons;
@@ -9,10 +10,12 @@ namespace GD.Core.Business
 	public class MaterialBl : IBusinessLayer<Material>
 	{
 		private IRepository<Material> Repository { get; }
+		private IRepository<UnitMeasure> UnitMeasureRepository { get; }
 
-		public MaterialBl(IRepository<Material> repository)
+		public MaterialBl(IRepository<Material> repository, IRepository<UnitMeasure> unitMeasureRepository)
 		{
 			Repository = repository;
+			UnitMeasureRepository = unitMeasureRepository;
 		}
 
 		public long InsertValue(Material model)
@@ -32,7 +35,17 @@ namespace GD.Core.Business
 
 		public IEnumerable<Material> GetAllValues()
 		{
-			return Repository.GetAll();
+			var listMaterials = Repository.GetAll().ToList();
+
+			if (listMaterials.Any())
+			{
+				foreach (var material in listMaterials)
+				{
+					material.UnitMeasure = UnitMeasureRepository.GetById(material.IdUnitMeasure);
+				}
+			}
+
+			return listMaterials;
 		}
 
 		public Material GetValueById<TId>(TId id)

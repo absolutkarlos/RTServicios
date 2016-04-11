@@ -64,7 +64,7 @@ namespace GD.Data.Access.Repositories
 
 		public void UpdateStatus(OrderFlow model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.forderflow_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.forderflowbyidorder_update", new Dictionary<string, object>
 			{
 				{
 					@"_jsonvalue", model.ToJson()

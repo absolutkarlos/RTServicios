@@ -48,6 +48,8 @@ namespace GD.RtSurvey.Api.Controllers
 		}
 
 		// DELETE api/SiteAccessType/DeleteBySite/5
+		[HttpDelete]
+		[Route(@"DeleteBySite/{id}")]
 		public void DeleteBySite(int id)
 		{
 			_siteAccessTypeBl.DeleteBySite(id);

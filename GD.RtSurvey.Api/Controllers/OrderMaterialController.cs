@@ -48,6 +48,7 @@ namespace GD.RtSurvey.Api.Controllers
 		}
 
 		// DELETE api/OrderMaterial/DeleteByOrder/5
+		[HttpDelete]
 		[Route(@"DeleteByOrder/{id}")]
 		public void DeleteByOrder(int id)
 		{

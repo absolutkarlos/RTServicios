@@ -6,11 +6,11 @@ using GD.Models.Commons;
 
 namespace GD.Core.Business
 {
-	public class OrderFlowBl : IBusinessLayer<OrderFlow>
+	public class OrderFlowBl : IOrderFlowBl
 	{
-		private IRepository<OrderFlow> Repository { get; }
+		private IOrderFlowRepository Repository { get; }
 
-		public OrderFlowBl(IRepository<OrderFlow> repository)
+		public OrderFlowBl(IOrderFlowRepository repository)
 		{
 			Repository = repository;
 		}
@@ -48,6 +48,11 @@ namespace GD.Core.Business
 		public void Dispose()
 		{
 			throw new NotImplementedException();
+		}
+
+		public void UpdateStatus(OrderFlow orderFlow)
+		{
+			Repository.UpdateStatus(orderFlow);
 		}
 	}
 }

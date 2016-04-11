@@ -64,9 +64,9 @@ namespace GD.RtSurvey.Api.Controllers
 		// PUT api/Order/UpdateStatus
 		[HttpPut]
 		[Route(@"UpdateStatus/")]
-		public void UpdateStatus([FromBody]Order order)
+		public long UpdateStatus([FromBody]Order order)
 		{
-			_orderBl.UpdateStatus(order);
+			return _orderBl.UpdateStatus(order);
 		}
 
 		// PUT api/Order/UpdateInformation/

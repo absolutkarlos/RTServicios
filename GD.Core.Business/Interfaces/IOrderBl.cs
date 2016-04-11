@@ -7,7 +7,7 @@ namespace GD.Core.Business.Interfaces
 	{
 		IEnumerable<Order> GetByUser<TId>(TId id);
 		Order GetInfo<TId>(TId id);
-		void UpdateStatus(Order model);
+		long UpdateStatus(Order model);
 		void UpdateOrderInformation(Order order);
 	}
 }

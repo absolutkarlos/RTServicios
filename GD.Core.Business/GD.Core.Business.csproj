@@ -90,6 +90,7 @@
     <Compile Include="Interfaces\IEntityChannelBl.cs" />
     <Compile Include="Interfaces\IEntityContactBl.cs" />
     <Compile Include="Interfaces\IOrderBl.cs" />
+    <Compile Include="Interfaces\IOrderFlowBl.cs" />
     <Compile Include="Interfaces\IOrderMaterialBl.cs" />
     <Compile Include="Interfaces\IOrderShotBl.cs" />
     <Compile Include="Interfaces\ISiteAccessTypeBl.cs" />
