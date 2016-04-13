@@ -82,6 +82,16 @@ namespace GD.Data.Access.Repositories
 			});
 		}
 
+		public void UpdateLinkType(Site model)
+		{
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsitebyidsite_update", new Dictionary<string, object>
+			{
+				{
+					@"_jsonvalue", model.ToJson()
+				}
+			});
+		}
+
 		public bool Exists<TId>(TId id)
 		{
 			throw new NotImplementedException();

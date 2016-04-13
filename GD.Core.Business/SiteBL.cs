@@ -72,6 +72,11 @@ namespace GD.Core.Business
 			Repository.UpdateBuildingInformation(site);
 		}
 
+		public void UpdateLinkType(Site site)
+		{
+			Repository.UpdateLinkType(site);
+		}
+
 		public bool ExistsValue<TId>(TId id)
 		{
 			throw new NotImplementedException();

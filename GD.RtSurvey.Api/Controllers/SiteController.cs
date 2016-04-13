@@ -64,5 +64,13 @@ namespace GD.RtSurvey.Api.Controllers
 		{
 			_siteBl.UpdateBuildingInformation(site);
 		}
+
+		// PUT api/Site/UpdateLinkType/
+		[HttpPut]
+		[Route(@"UpdateLinkType/")]
+		public void UpdateLinkType([FromBody]Site site)
+		{
+			_siteBl.UpdateLinkType(site);
+		}
 	}
 }

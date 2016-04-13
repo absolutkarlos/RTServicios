@@ -7,5 +7,6 @@ namespace GD.Data.Access.Interfaces
 	{
 		IEnumerable<Site> GetByClient<TId>(TId id);
 		void UpdateBuildingInformation(Site site);
+		void UpdateLinkType(Site site);
 	}
 }
