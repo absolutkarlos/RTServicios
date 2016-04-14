@@ -84,7 +84,7 @@ namespace GD.Data.Access.Repositories
 
 		public void UpdateLinkType(Site model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsitebyidsite_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsitebyidsite2_update", new Dictionary<string, object>
 			{
 				{
 					@"_jsonvalue", model.ToJson()
