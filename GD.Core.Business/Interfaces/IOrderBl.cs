@@ -9,5 +9,6 @@ namespace GD.Core.Business.Interfaces
 		Order GetInfo<TId>(TId id);
 		long UpdateStatus(Order model);
 		void UpdateOrderInformation(Order order);
+		void UpdateOrderSettingUp(Order order);
 	}
 }

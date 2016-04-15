@@ -92,6 +92,16 @@ namespace GD.Data.Access.Repositories
 			});
 		}
 
+		public void UpdateOrderSettingUp(Order model)
+		{
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.forderbyidorder2_update", new Dictionary<string, object>
+			{
+				{
+					@"_jsonvalue", model.ToJson()
+				}
+			});
+		}
+
 		public bool Exists<TId>(TId id)
 		{
 			throw new NotImplementedException();

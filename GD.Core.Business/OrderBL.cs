@@ -122,6 +122,11 @@ namespace GD.Core.Business
 			Repository.UpdateOrderInformation(order);
 		}
 
+		public void UpdateOrderSettingUp(Order order)
+		{
+			Repository.UpdateOrderSettingUp(order);
+		}
+
 		public IEnumerable<Order> GetAllValues()
 		{
 			return Repository.GetAll();

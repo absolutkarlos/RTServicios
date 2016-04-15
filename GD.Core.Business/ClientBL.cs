@@ -51,7 +51,19 @@ namespace GD.Core.Business
 
 		public IEnumerable<Client> GetAllValues()
 		{
-			return Repository.GetAll();
+			var clients = Repository.GetAll().ToList();
+
+			if (clients.Any())
+			{
+				foreach (var client in clients)
+				{
+					client.Country = CountryRepository.GetById(client.IdCountry);
+					client.State = StateRepository.GetById(client.IdState);
+					client.City = CityRepository.GetById(client.IdCity);
+					client.Zone = ZoneRepository.GetById(client.IdZone);
+				}
+			}
+			return clients;
 		}
 
 		public Client GetValueById<TId>(TId id)

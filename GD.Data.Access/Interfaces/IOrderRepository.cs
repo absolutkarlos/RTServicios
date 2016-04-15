@@ -8,5 +8,6 @@ namespace GD.Data.Access.Interfaces
 		IEnumerable<Order> GetByUser<TId>(TId id);
 		Order GetInfo<TId>(TId id);
 		void UpdateOrderInformation(Order model);
+		void UpdateOrderSettingUp(Order model);
 	}
 }

@@ -76,5 +76,13 @@ namespace GD.RtSurvey.Api.Controllers
 		{
 			_orderBl.UpdateOrderInformation(order);
 		}
+
+		// PUT api/Order/UpdateSettingUp/
+		[HttpPut]
+		[Route(@"UpdateSettingUp/")]
+		public void UpdateSettingUp([FromBody]Order order)
+		{
+			_orderBl.UpdateOrderSettingUp(order);
+		}
 	}
 }
