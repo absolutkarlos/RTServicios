@@ -1,4 +1,6 @@
 *.user
 *.suo
 **/packages/*
-*.obj
+*.obj/*
+GD.RtSurvey.Api/obj/
+GD.Models.Commons/obj/
