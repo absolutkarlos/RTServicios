@@ -5,10 +5,11 @@ using GD.Data.Access.DataAccess.Interface;
 using GD.Data.Access.Interfaces;
 using GD.Models.Commons;
 using GD.Models.Commons.Utilities;
+using NpgsqlTypes;
 
 namespace GD.Data.Access.Repositories
 {
-	public class LineSightRepository : IRepository<LineSight>
+	public class LineSightRepository : ILineSightRepository
 	{
 		private IDataAccessContext DbContext { get; }
 
@@ -19,11 +20,9 @@ namespace GD.Data.Access.Repositories
 
 		public long Insert(LineSight model)
 		{
-			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.flinesight_set", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.flinesight_set", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
@@ -34,32 +33,34 @@ namespace GD.Data.Access.Repositories
 
 		public void Update(LineSight model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.flinesight_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.flinesight_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
 		public IEnumerable<LineSight> GetAll()
 		{
-			return DbContext.ExecuteStoredProcedure<List<LineSight>>(@"rtsurvey.flinesight_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<LineSight>>(@"rtsurvey.flinesight_get", new List<Parameter>
 			{
-				{
-					@"_id", 0
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = 0 }
 			});
 		}
 
 		public LineSight GetById<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<LineSight>>(@"rtsurvey.flinesight_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<LineSight>>(@"rtsurvey.flinesight_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			}).FirstOrDefault();
+		}
+
+		public IEnumerable<LineSight> GetBySite<TId>(TId id)
+		{
+			return DbContext.ExecuteStoredProcedure<List<LineSight>>(@"rtsurvey.flinesightbyidsite_get", new List<Parameter>
+			{
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
+			});
 		}
 
 		public bool Exists<TId>(TId id)

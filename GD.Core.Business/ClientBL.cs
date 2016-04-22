@@ -60,7 +60,10 @@ namespace GD.Core.Business
 					client.Country = CountryRepository.GetById(client.IdCountry);
 					client.State = StateRepository.GetById(client.IdState);
 					client.City = CityRepository.GetById(client.IdCity);
-					client.Zone = ZoneRepository.GetById(client.IdZone);
+					if (client.IdZone.IsGreaterThanZero())
+					{
+						client.Zone = ZoneRepository.GetById(client.IdZone);
+					}
 				}
 			}
 			return clients;
@@ -105,6 +108,11 @@ namespace GD.Core.Business
 		public int ValidateByRuc(string ruc)
 		{
 			return Repository.ValidateByRuc(ruc);
+		}
+
+		public int ValidateByRuc(Client client)
+		{
+			return Repository.ValidateByRuc(client);
 		}
 
 		public bool ExistsValue<TId>(TId id)

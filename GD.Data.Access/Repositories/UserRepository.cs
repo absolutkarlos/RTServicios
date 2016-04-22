@@ -5,6 +5,7 @@ using GD.Models.Commons;
 using GD.Data.Access.DataAccess.Interface;
 using GD.Data.Access.Interfaces;
 using GD.Models.Commons.Utilities;
+using NpgsqlTypes;
 
 namespace GD.Data.Access.Repositories
 {
@@ -19,11 +20,9 @@ namespace GD.Data.Access.Repositories
 
 		public long Insert(User model)
 		{
-			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fuser_set", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fuser_set", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
@@ -34,31 +33,25 @@ namespace GD.Data.Access.Repositories
 
 		public void Update(User model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.fuser_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fuser_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
 		public IEnumerable<User> GetAll()
 		{
-			return DbContext.ExecuteStoredProcedure<List<User>>(@"rtsurvey.fuser_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<User>>(@"rtsurvey.fuser_get", new List<Parameter>
 			{
-				{
-					@"_id", 0
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = 0 }
 			});
 		}
 
 		public User GetById<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<User>>(@"rtsurvey.fuser_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<User>>(@"rtsurvey.fuser_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			}).FirstOrDefault();
 		}
 

@@ -86,6 +86,7 @@
     <Compile Include="Interfaces\ICityRepository.cs" />
     <Compile Include="Interfaces\IEntityContactRepository.cs" />
     <Compile Include="Interfaces\IClientRepository.cs" />
+    <Compile Include="Interfaces\ILineSightRepository.cs" />
     <Compile Include="Interfaces\IOrderFlowRepository.cs" />
     <Compile Include="Interfaces\IOrderMaterialRepository.cs" />
     <Compile Include="Interfaces\IOrderRepository.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Interfaces\ISiteSheduleRepository.cs" />
     <Compile Include="Interfaces\IStateRepository.cs" />
     <Compile Include="Interfaces\IZoneRepository.cs" />
+    <Compile Include="Parameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ActionRepository.cs" />
     <Compile Include="Repositories\AuditRepository.cs" />

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
-using System.Web.Script.Serialization;
 using GD.Data.Access.DataAccess.Interface;
 using GD.Models.Commons.Utilities;
 using Npgsql;
@@ -24,9 +23,9 @@ namespace GD.Data.Access.DataAccess
 		/// Returns a DataTable with the results of the store procedure
 		/// </summary>
 		/// <param name="nameSp">string with the stored procedure Name</param>
-		/// <param name="parameters">Dictionary with the for the query</param>
+		/// <param name="parameters">List with the for the query</param>
 		/// <returns>Returns a datatable base on the query executed</returns>
-		public T ExecuteStoredProcedure<T>(string nameSp, Dictionary<string, object> parameters) where T : new()
+		public T ExecuteStoredProcedure<T>(string nameSp, List<Parameter> parameters) where T : new()
 		{
 			using (var conn = new NpgsqlConnection(ConnectionString))
 			{
@@ -44,8 +43,8 @@ namespace GD.Data.Access.DataAccess
 		/// Execute store procedure
 		/// </summary>
 		/// <param name="nameSp">string with the stored procedure Name</param>
-		/// <param name="parameters">Dictionary with the for the query</param>
-		public void ExecuteStoredProcedure(string nameSp, Dictionary<string, object> parameters)
+		/// <param name="parameters">List with the for the query</param>
+		public void ExecuteStoredProcedure(string nameSp, List<Parameter> parameters)
 		{
 			using (var conn = new NpgsqlConnection(ConnectionString))
 			{
@@ -75,20 +74,19 @@ namespace GD.Data.Access.DataAccess
 		/// Returns a DataTable with the results of the store procedure
 		/// </summary>
 		/// <param name="nameSp">string with the name stored procedure</param>
-		/// <param name="parameters">Dictionary with the for the query</param>
+		/// <param name="parameters">List with the for the query</param>
 		/// <param name="connection"></param>
-		private string ExecuteCommandSp(string nameSp, Dictionary<string, object> parameters, NpgsqlConnection connection)
+		private string ExecuteCommandSp(string nameSp, List<Parameter> parameters, NpgsqlConnection connection)
 		{
 			using (var command = new NpgsqlCommand(nameSp, connection))
 			{
 				command.CommandType = CommandType.StoredProcedure;
 
-				if (parameters != null)
+				if (parameters != null && parameters.Any())
 				{
-					foreach (string key in parameters.Keys)
+					foreach (Parameter parameter in parameters)
 					{
-						var dbType = (key == @"_jsonvalue") ? NpgsqlDbType.Json : ((key == @"_id") ? NpgsqlDbType.Integer : NpgsqlDbType.Text);
-						command.Parameters.AddWithValue(key, dbType, parameters[key]);
+						command.Parameters.AddWithValue(parameter.Key, (NpgsqlDbType)parameter.DbType, parameter.Value);
 					}
 				}
 
@@ -99,7 +97,7 @@ namespace GD.Data.Access.DataAccess
 					{
 						for (int i = 0; i < reader.FieldCount; i++)
 						{
-							if(reader[i] != DBNull.Value)
+							if (reader[i] != DBNull.Value)
 								result = reader[i].ToString();
 						}
 					}
@@ -112,20 +110,19 @@ namespace GD.Data.Access.DataAccess
 		/// Execute store procedure
 		/// </summary>
 		/// <param name="nameSp">string with the name stored procedure</param>
-		/// <param name="parameters">Dictionary with the for the query</param>
+		/// <param name="parameters">List with the for the query</param>
 		/// <param name="connection"></param>
-		private void ExecuteCommandSpNonQuery(string nameSp, Dictionary<string, object> parameters, NpgsqlConnection connection)
+		private void ExecuteCommandSpNonQuery(string nameSp, List<Parameter> parameters, NpgsqlConnection connection)
 		{
 			using (var command = new NpgsqlCommand(nameSp, connection))
 			{
 				command.CommandType = CommandType.StoredProcedure;
 
-				if (parameters != null)
+				if (parameters != null && parameters.Any())
 				{
-					foreach (string key in parameters.Keys)
+					foreach (Parameter parameter in parameters)
 					{
-						var dbType = (key == @"_jsonvalue") ? NpgsqlDbType.Json : ((key == @"_id") ? NpgsqlDbType.Integer : NpgsqlDbType.Text);
-						command.Parameters.AddWithValue(key, dbType, parameters[key]);
+						command.Parameters.AddWithValue(parameter.Key, (NpgsqlDbType)parameter.DbType, parameter.Value);
 					}
 				}
 

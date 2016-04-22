@@ -5,6 +5,7 @@ using GD.Data.Access.DataAccess.Interface;
 using GD.Data.Access.Interfaces;
 using GD.Models.Commons;
 using GD.Models.Commons.Utilities;
+using NpgsqlTypes;
 
 namespace GD.Data.Access.Repositories
 {
@@ -19,11 +20,9 @@ namespace GD.Data.Access.Repositories
 
 		public long Insert(Site model)
 		{
-			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fsite_set", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fsite_set", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
@@ -34,61 +33,49 @@ namespace GD.Data.Access.Repositories
 
 		public void Update(Site model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsite_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsite_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
 		public IEnumerable<Site> GetAll()
 		{
-			return DbContext.ExecuteStoredProcedure<List<Site>>(@"rtsurvey.fsite_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<Site>>(@"rtsurvey.fsite_get", new List<Parameter>
 			{
-				{
-					@"_id", 0
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = 0 }
 			});
 		}
 
 		public Site GetById<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<Site>>(@"rtsurvey.fsite_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<Site>>(@"rtsurvey.fsite_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			}).FirstOrDefault();
 		}
 
 		public IEnumerable<Site> GetByClient<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<Site>>(@"rtsurvey.fsitebyclient_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<Site>>(@"rtsurvey.fsitebyclient_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			});
 		}
 
 		public void UpdateBuildingInformation(Site model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsitebyidsite_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsitebyidsite_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
 		public void UpdateLinkType(Site model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsitebyidsite2_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsitebyidsite2_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 

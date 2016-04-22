@@ -5,6 +5,7 @@ using GD.Data.Access.DataAccess.Interface;
 using GD.Data.Access.Interfaces;
 using GD.Models.Commons;
 using GD.Models.Commons.Utilities;
+using NpgsqlTypes;
 
 namespace GD.Data.Access.Repositories
 {
@@ -19,11 +20,9 @@ namespace GD.Data.Access.Repositories
 
 		public long Insert(SiteAccessType model)
 		{
-			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fsiteaccesstype_set", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fsiteaccesstype_set", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
@@ -34,51 +33,41 @@ namespace GD.Data.Access.Repositories
 
 		public void Update(SiteAccessType model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsiteaccesstype_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsiteaccesstype_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
 		public IEnumerable<SiteAccessType> GetAll()
 		{
-			return DbContext.ExecuteStoredProcedure<List<SiteAccessType>>(@"rtsurvey.fsiteaccesstype_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<SiteAccessType>>(@"rtsurvey.fsiteaccesstype_get", new List<Parameter>
 			{
-				{
-					@"_id", 0
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = 0 }
 			});
 		}
 
 		public SiteAccessType GetById<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<SiteAccessType>>(@"rtsurvey.fsiteaccesstype_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<SiteAccessType>>(@"rtsurvey.fsiteaccesstype_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			}).FirstOrDefault();
 		}
 
 		public IEnumerable<SiteAccessType> GetBySite<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<SiteAccessType>>(@"rtsurvey.fsiteaccesstypebyidsite_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<SiteAccessType>>(@"rtsurvey.fsiteaccesstypebyidsite_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			});
 		}
 
 		public void DeleteBySite<TId>(TId id)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsiteaccesstypebyidsite_delete", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fsiteaccesstypebyidsite_delete", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			});
 		}
 

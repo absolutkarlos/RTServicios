@@ -6,5 +6,6 @@ namespace GD.Core.Business.Interfaces
 	{
 		Client GetInfo<TId>(TId id);
 		int ValidateByRuc(string ruc);
-	}
+		int ValidateByRuc(Client client);
+	} 
 }

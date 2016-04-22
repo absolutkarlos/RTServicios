@@ -61,5 +61,13 @@ namespace GD.RtSurvey.Api.Controllers
 		{
 			return _clientBl.ValidateByRuc(ruc);
 		}
+
+		// POST api/Client/ValidateByRuc/1235
+		[HttpPost]
+		[Route(@"ValidateByRuc")]
+		public int ValidateByRuc([FromBody]Client client)
+		{
+			return _clientBl.ValidateByRuc(client);
+		}
 	}
 }

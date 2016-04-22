@@ -5,6 +5,7 @@ using GD.Data.Access.DataAccess.Interface;
 using GD.Data.Access.Interfaces;
 using GD.Models.Commons;
 using GD.Models.Commons.Utilities;
+using NpgsqlTypes;
 
 namespace GD.Data.Access.Repositories
 {
@@ -19,11 +20,9 @@ namespace GD.Data.Access.Repositories
 
 		public long Insert(OrderMaterial model)
 		{
-			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fordermaterial_set", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fordermaterial_set", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
@@ -34,51 +33,41 @@ namespace GD.Data.Access.Repositories
 
 		public void Update(OrderMaterial model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.fordermaterial_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fordermaterial_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
 		public IEnumerable<OrderMaterial> GetAll()
 		{
-			return DbContext.ExecuteStoredProcedure<List<OrderMaterial>>(@"rtsurvey.fordermaterial_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<OrderMaterial>>(@"rtsurvey.fordermaterial_get", new List<Parameter>
 			{
-				{
-					@"_id", 0
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = 0 }
 			});
 		}
 
 		public OrderMaterial GetById<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<OrderMaterial>>(@"rtsurvey.fordermaterial_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<OrderMaterial>>(@"rtsurvey.fordermaterial_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			}).FirstOrDefault();
 		}
 
 		public void DeleteByOrder<TId>(TId id)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.fordermaterialbyidorder_delete", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fordermaterialbyidorder_delete", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			});
 		}
 
 		public IEnumerable<OrderMaterial> GetByOrder<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<OrderMaterial>>(@"rtsurvey.fordermaterialbyidorder_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<OrderMaterial>>(@"rtsurvey.fordermaterialbyidorder_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			});
 		}
 

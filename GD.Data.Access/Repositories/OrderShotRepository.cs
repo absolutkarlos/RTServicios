@@ -5,6 +5,7 @@ using GD.Data.Access.DataAccess.Interface;
 using GD.Data.Access.Interfaces;
 using GD.Models.Commons;
 using GD.Models.Commons.Utilities;
+using NpgsqlTypes;
 
 namespace GD.Data.Access.Repositories
 {
@@ -19,11 +20,9 @@ namespace GD.Data.Access.Repositories
 
 		public long Insert(OrderShot model)
 		{
-			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fordershot_set", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fordershot_set", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
@@ -34,41 +33,33 @@ namespace GD.Data.Access.Repositories
 
 		public void Update(OrderShot model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.fordershot_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fordershot_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
 		public IEnumerable<OrderShot> GetAll()
 		{
-			return DbContext.ExecuteStoredProcedure<List<OrderShot>>(@"rtsurvey.fordershot_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<OrderShot>>(@"rtsurvey.fordershot_get", new List<Parameter>
 			{
-				{
-					@"_id", 0
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = 0 }
 			});
 		}
 
 		public OrderShot GetById<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<OrderShot>>(@"rtsurvey.fordershot_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<OrderShot>>(@"rtsurvey.fordershot_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			}).FirstOrDefault();
 		}
 
 		public IEnumerable<OrderShot> GetByOrder<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<OrderShot>>(@"rtsurvey.fordershotbyidorder_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<OrderShot>>(@"rtsurvey.fordershotbyidorder_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			});
 		}
 

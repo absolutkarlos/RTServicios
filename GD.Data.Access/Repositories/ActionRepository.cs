@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using GD.Data.Access.DataAccess.Interface;
 using GD.Data.Access.Interfaces;
-using GD.Models.Commons;
 using GD.Models.Commons.Utilities;
+using NpgsqlTypes;
 using Action = GD.Models.Commons.Action;
 
 namespace GD.Data.Access.Repositories
@@ -20,11 +20,9 @@ namespace GD.Data.Access.Repositories
 
 		public long Insert(Action model)
 		{
-			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.faction_set", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.faction_set", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
@@ -35,31 +33,25 @@ namespace GD.Data.Access.Repositories
 
 		public void Update(Action model)
 		{
-			DbContext.ExecuteStoredProcedure<Action>(@"rtsurvey.faction_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure<Action>(@"rtsurvey.faction_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
 		public IEnumerable<Action> GetAll()
 		{
-			return DbContext.ExecuteStoredProcedure<List<Action>>(@"rtsurvey.faction_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<Action>>(@"rtsurvey.faction_get", new List<Parameter>
 			{
-				{
-					@"_id", 0
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = 0 }
 			});
 		}
 
 		public Action GetById<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<Action>>(@"rtsurvey.faction_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<Action>>(@"rtsurvey.faction_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			}).FirstOrDefault();
 		}
 

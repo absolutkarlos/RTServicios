@@ -5,6 +5,7 @@ using GD.Data.Access.DataAccess.Interface;
 using GD.Data.Access.Interfaces;
 using GD.Models.Commons;
 using GD.Models.Commons.Utilities;
+using NpgsqlTypes;
 
 namespace GD.Data.Access.Repositories
 {
@@ -19,11 +20,9 @@ namespace GD.Data.Access.Repositories
 
 		public long Insert(OrderFlow model)
 		{
-			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.forderflow_set", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.forderflow_set", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
@@ -34,51 +33,41 @@ namespace GD.Data.Access.Repositories
 
 		public void Update(OrderFlow model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.forderflow_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.forderflow_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
 		public IEnumerable<OrderFlow> GetAll()
 		{
-			return DbContext.ExecuteStoredProcedure<List<OrderFlow>>(@"rtsurvey.forderflow_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<OrderFlow>>(@"rtsurvey.forderflow_get", new List<Parameter>
 			{
-				{
-					@"_id", 0
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = 0 }
 			});
 		}
 
 		public OrderFlow GetById<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<OrderFlow>>(@"rtsurvey.forderflow_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<OrderFlow>>(@"rtsurvey.forderflow_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			}).FirstOrDefault();
 		}
 
 		public void UpdateStatus(OrderFlow model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.forderflowbyidorder_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.forderflowbyidorder_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
 		public IEnumerable<OrderFlow> GetByOrder<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<OrderFlow>>(@"rtsurvey.forderflowbyidorder_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<OrderFlow>>(@"rtsurvey.forderflowbyidorder_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			});
 		}
 

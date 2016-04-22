@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.EnterpriseServices;
 using System.Linq;
 using GD.Data.Access.DataAccess.Interface;
 using GD.Data.Access.Interfaces;
 using GD.Models.Commons;
 using GD.Models.Commons.Utilities;
+using NpgsqlTypes;
 
 namespace GD.Data.Access.Repositories
 {
@@ -20,11 +20,9 @@ namespace GD.Data.Access.Repositories
 
 		public long Insert(ServiceType model)
 		{
-			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fservicetype_set", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<long>(@"rtsurvey.fservicetype_set", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
@@ -35,31 +33,25 @@ namespace GD.Data.Access.Repositories
 
 		public void Update(ServiceType model)
 		{
-			DbContext.ExecuteStoredProcedure(@"rtsurvey.fservicetype_update", new Dictionary<string, object>
+			DbContext.ExecuteStoredProcedure(@"rtsurvey.fservicetype_update", new List<Parameter>
 			{
-				{
-					@"_jsonvalue", model.ToJson()
-				}
+				new Parameter { Key = @"_jsonvalue", DbType = NpgsqlDbType.Json, Value = model.ToJson() }
 			});
 		}
 
 		public IEnumerable<ServiceType> GetAll()
 		{
-			return DbContext.ExecuteStoredProcedure<List<ServiceType>>(@"rtsurvey.fservicetype_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<ServiceType>>(@"rtsurvey.fservicetype_get", new List<Parameter>
 			{
-				{
-					@"_id", 0
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = 0 }
 			});
 		}
 
 		public ServiceType GetById<TId>(TId id)
 		{
-			return DbContext.ExecuteStoredProcedure<List<ServiceType>>(@"rtsurvey.fservicetype_get", new Dictionary<string, object>
+			return DbContext.ExecuteStoredProcedure<List<ServiceType>>(@"rtsurvey.fservicetype_get", new List<Parameter>
 			{
-				{
-					@"_id", id
-				}
+				new Parameter { Key = @"_id", DbType = NpgsqlDbType.Integer, Value = id }
 			}).FirstOrDefault();
 		}
 

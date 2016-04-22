@@ -35,6 +35,7 @@ namespace GD.RtSurvey.Api
 			{
 				TokenEndpointPath = new PathString(@"/Token"),
 				Provider = _container.Resolve<ApplicationOAuthProvider>(),
+				RefreshTokenProvider = _container.Resolve<ApplicationRefreshTokenProvider>(),
 				//AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
 				AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(int.Parse(ConfigurationManager.AppSettings[@"TimeExpiredToken"])),
 				// In production mode set AllowInsecureHttp = false

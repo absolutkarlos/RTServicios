@@ -5,6 +5,7 @@ using System.Linq;
 using GD.Core.Business.Interfaces;
 using GD.Models.Commons;
 using GD.Data.Access.Interfaces;
+using GD.Data.Access.Repositories;
 using GD.Models.Commons.Utilities;
 
 namespace GD.Core.Business
@@ -25,11 +26,13 @@ namespace GD.Core.Business
 		private IRepository<AccessType> AccessTypeRepository { get; }
 		private IRepository<Material> MaterialRepository { get; }
 		private IRepository<UnitMeasure> UnitMeasureRepository { get; }
+		private ILineSightRepository LineSightRepository { get; }
+		private IRepository<RadioBase> RadioBaseRepository { get; }
 
 		public OrderBl(IOrderRepository repository, ISiteAccessTypeRepository siteAccessTypeRepository, ISiteSheduleRepository siteSheduleRepository, IOrderMaterialRepository orderMaterialRepository,
 						IOrderShotRepository orderShotRepository, IOrderFlowRepository orderFlowRepository, ISiteServiceTypeRepository siteServiceTypeRepository, IEntityContactRepository entityContactRepository,
 						IEntityChannelRepository entityChannelRepository, IRepository<EntityChannelType> entityChannelTypeRepository, IRepository<ServiceType> serviceTypeRepository, IRepository<AccessType> accessTypeRepository,
-						IRepository<Material> materialRepository, IRepository<UnitMeasure> unitMeasureRepository)
+						IRepository<Material> materialRepository, IRepository<UnitMeasure> unitMeasureRepository, ILineSightRepository lineSightRepository, IRepository<RadioBase> radioBaseRepository)
 		{
 			Repository = repository;
 			SiteAccessTypeRepository = siteAccessTypeRepository;
@@ -45,6 +48,8 @@ namespace GD.Core.Business
 			AccessTypeRepository = accessTypeRepository;
 			MaterialRepository = materialRepository;
 			UnitMeasureRepository = unitMeasureRepository;
+			LineSightRepository = lineSightRepository;
+			RadioBaseRepository = radioBaseRepository;
 		}
 
 		public long InsertValue(Order model)
@@ -169,6 +174,16 @@ namespace GD.Core.Business
 					}
 
 
+					var listLineSight = LineSightRepository.GetBySite(order.Site.Id).ToList();
+
+					foreach (var lineSight in listLineSight)
+					{
+						lineSight.RadioBase = RadioBaseRepository.GetById(lineSight.IdRadioBase);
+					}
+
+					order.Site.ListLineSight = new List<LineSight>(listLineSight);
+
+
 					var listSiteServiceType = SiteServiceTypeRepository.GetBySite(order.Site.Id).ToList();
 
 					foreach (var serviceType in listSiteServiceType)
@@ -181,7 +196,6 @@ namespace GD.Core.Business
 					order.Site.ListServiceType = new List<ServiceType>(listSiteServiceType);
 
 
-
 					var listSiteAccessType = SiteAccessTypeRepository.GetBySite(order.Site.Id).ToList();
 
 					foreach (var siteAccessType in listSiteAccessType)
@@ -190,7 +204,6 @@ namespace GD.Core.Business
 					}
 
 					order.Site.ListSiteAccessType = new List<SiteAccessType>(listSiteAccessType);
-
 
 
 					var listOrderMaterials = OrderMaterialRepository.GetByOrder(order.Id).ToList();
@@ -202,7 +215,6 @@ namespace GD.Core.Business
 					}
 
 					order.ListMaterials = new List<OrderMaterial>(listOrderMaterials);
-
 
 
 					var listOrderFlow = OrderFlowRepository.GetByOrder(order.Id).ToList();
