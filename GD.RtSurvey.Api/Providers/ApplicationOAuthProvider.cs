@@ -42,7 +42,7 @@ namespace GD.RtSurvey.Api.Providers
 
 				if (!userId.IsGreaterThanZero())
 				{
-					context.SetError(HttpStatusCode.Unauthorized.ToString(), @"The user name or password is incorrect.");
+					context.SetError(HttpStatusCode.Unauthorized.ToString(), @"Nombre de usuario o contraseña incorrectos.");
 					return;
 				}
 
