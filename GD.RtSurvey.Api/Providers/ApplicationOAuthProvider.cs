@@ -38,7 +38,7 @@ namespace GD.RtSurvey.Api.Providers
 		{
 			try
 			{
-				var userId = _authenticationBl.ValidateAutentication(new User { UserName = context.UserName, Password = context.Password });
+				var userId = _authenticationBl.ValidateAutentication(new User { UserName = context.UserName, Password = (new Utility()).Encrypt(context.Password) });
 
 				if (!userId.IsGreaterThanZero())
 				{
